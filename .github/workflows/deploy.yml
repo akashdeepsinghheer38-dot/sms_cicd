@@ -6,46 +6,54 @@ on:
       - main
 
 jobs:
-
-  backend:
+  build-backend:
     name: Build Backend and Push
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v4
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build Backend
-        uses: docker/build-push-action@v7
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Backend Image
+        uses: docker/build-push-action@v5
         with:
           context: ./backend
+          file: ./backend/Dockerfile
           push: true
-          tags: akashdeepsingh38/sms-backend-aka:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/sms-backend:v${{ github.run_number }}
 
-
-  frontend:
+  build-frontend:
     name: Build Frontend and Push
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v4
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build Frontend
-        uses: docker/build-push-action@v7
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Frontend Image
+        uses: docker/build-push-action@v5
         with:
           context: ./frontend
+          file: ./frontend/Dockerfile
           push: true
-          tags: akashdeepsingh38/sms-frontend-aka:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/sms-frontend:v${{ github.run_number }}
