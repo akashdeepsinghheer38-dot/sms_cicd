@@ -184,7 +184,7 @@ jobs:
               -e MYSQL_HOST=sms-mysql \
               -e MYSQL_PORT=3306 \
               -e MYSQL_USER=sms_user \
-              -e MYSQL_PASSWORD=root \
+              -e MYSQL_PASSWORD=root9090 \
               -e MYSQL_DATABASE=sms \
               ${{ secrets.DOCKERHUB_USERNAME }}/sms-backend:v${{ github.run_number }}
 
